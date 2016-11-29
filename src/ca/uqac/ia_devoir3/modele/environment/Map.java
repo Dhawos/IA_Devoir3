@@ -36,6 +36,7 @@ public class Map {
                 if(columnIndex - 1 >= 0){
                     set.add(grid.get(rowIndex).get(columnIndex - 1));
                 }
+                tile.setNeighbors(set);
             }
         }
         //Placing portal

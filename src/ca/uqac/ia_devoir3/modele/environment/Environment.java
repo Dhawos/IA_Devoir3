@@ -19,5 +19,8 @@ public class Environment {
         map = new Map(currentMapSize);
     }
 
+    public Tile getTile(Position pos){
+        return map.getTile(pos.getX(),pos.getY());
+    }
 
 }

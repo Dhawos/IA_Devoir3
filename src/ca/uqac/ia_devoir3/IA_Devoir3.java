@@ -8,5 +8,6 @@ import ca.uqac.ia_devoir3.modele.environment.Environment;
 public class IA_Devoir3 {
     public static void main(String[] args){
         Environment environment = new Environment();
+        environment.spawnNewAgent();
     }
 }

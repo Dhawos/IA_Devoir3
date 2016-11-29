@@ -9,6 +9,7 @@ import java.util.Random;
  */
 public class Map {
     private ArrayList<ArrayList<Tile>> grid;
+    private Position spawnPosition;
 
     public Map(int n) { //Builds a nxn map
         grid = new ArrayList<>(n);
@@ -68,13 +69,24 @@ public class Map {
                 tile.insertMonster();
             }
         }
-
-
+        //Determining spawnPosition
+        boolean validPositionFound = false;
+        while(!validPositionFound){
+            int x = rn.nextInt(n);
+            int y = rn.nextInt(n);
+            Tile tile = grid.get(x).get(y);
+            if(!tile.isPortal() && !tile.isCliff() && !tile.isMonster()){
+                validPositionFound = true;
+                spawnPosition = tile.getPosition();
+            }
+        }
     }
 
     public Tile getTile(int i,int j){
         return grid.get(i).get(j);
     }
 
-
+    public Position getSpawnPosition() {
+        return spawnPosition;
+    }
 }

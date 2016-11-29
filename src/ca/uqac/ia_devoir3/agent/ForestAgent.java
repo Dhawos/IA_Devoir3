@@ -10,6 +10,10 @@ public class ForestAgent{
     private boolean alive;
     private Position pos;
 
+    public ForestAgent(Position pos){
+        this.pos = pos;
+        this.alive = true;
+    }
     /*private Action chooseAnAction(){
         return new Action();
     }*/

@@ -1,11 +1,13 @@
-package ca.uqac.ia_devoir3.modele.environment;
+package ca.uqac.ia_devoir3.model.environment;
 
 import ca.uqac.ia_devoir3.agent.ForestAgent;
+
+import java.util.Observable;
 
 /**
  * Created by dhawo on 28/11/2016.
  */
-public class Environment {
+public class Environment extends Observable {
     private Map map;
     private int score;
     private int currentMapSize;
@@ -19,7 +21,21 @@ public class Environment {
     public Environment() {
         score = 0;
         currentMapSize = 3;
-        map = new Map(currentMapSize);
+
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
+        setChanged();
+        notifyObservers("Map");
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public int getCurrentMapSize() {
+        return currentMapSize;
     }
 
     public Tile getTile(Position pos){
@@ -28,6 +44,8 @@ public class Environment {
 
     public void spawnNewAgent(){
         currentAgent = new ForestAgent(map.getSpawnPosition());
+        setChanged();
+        notifyObservers("Agent");
     }
 
 }

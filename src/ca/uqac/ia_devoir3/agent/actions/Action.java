@@ -1,6 +1,6 @@
 package ca.uqac.ia_devoir3.agent.actions;
 
-import ca.uqac.ia_devoir3.modele.environment.InterfaceEnvironment;
+import ca.uqac.ia_devoir3.model.environment.InterfaceEnvironment;
 
 /**
  * Created by dhawo on 29/11/2016.

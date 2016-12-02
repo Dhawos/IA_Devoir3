@@ -1,4 +1,4 @@
-package ca.uqac.ia_devoir3.modele.environment;
+package ca.uqac.ia_devoir3.model.environment;
 
 /**
  * Created by dhawo on 28/11/2016.

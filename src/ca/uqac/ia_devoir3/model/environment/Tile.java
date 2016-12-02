@@ -1,11 +1,12 @@
-package ca.uqac.ia_devoir3.modele.environment;
+package ca.uqac.ia_devoir3.model.environment;
 
 import java.util.HashSet;
+import java.util.Observable;
 
 /**
  * Created by dhawo on 28/11/2016.
  */
-public class Tile {
+public class Tile extends Observable{
     private Position pos;
     private boolean smell;
     private boolean wind;
@@ -54,15 +55,31 @@ public class Tile {
     public void insertMonster(){
         monster = true;
         for(Tile tile : neighbors){
-            tile.smell = true;
+            tile.insertSmell(true);
         }
+        setChanged();
+        notifyObservers();
     }
 
     public void insertCliff(){
         cliff = true;
         for(Tile tile : neighbors){
-            tile.wind = true;
+            tile.insertWind(true);
         }
+        setChanged();
+        notifyObservers();
+    }
+
+    public void insertSmell(boolean smell) {
+        this.smell = smell;
+        setChanged();
+        notifyObservers();
+    }
+
+    public void insertWind(boolean wind) {
+        this.wind = wind;
+        setChanged();
+        notifyObservers();
     }
 
     public void setNeighbors(HashSet<Tile> neighbors){

@@ -1,7 +1,8 @@
-package ca.uqac.ia_devoir3.modele.environment;
+package ca.uqac.ia_devoir3.model.environment;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Random;
 
 /**
@@ -13,28 +14,28 @@ public class Map {
 
     public Map(int n) { //Builds a nxn map
         grid = new ArrayList<>(n);
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             grid.add(new ArrayList<Tile>(n));
-            for(int j = 0; j < n; j++){
-                grid.get(i).add(new Tile(new Position(i,j)));
+            for (int j = 0; j < n; j++) {
+                grid.get(i).add(new Tile(new Position(i, j)));
             }
         }
         //Building neighbors
         HashSet<Tile> set = new HashSet<>();
-        for(ArrayList<Tile> row : grid){
-            for(Tile tile : row){
+        for (ArrayList<Tile> row : grid) {
+            for (Tile tile : row) {
                 int rowIndex = tile.getPosition().getX();
                 int columnIndex = tile.getPosition().getY();
-                if(rowIndex - 1 >= 0){
-                    set.add(grid.get(rowIndex-1).get(columnIndex));
+                if (rowIndex - 1 >= 0) {
+                    set.add(grid.get(rowIndex - 1).get(columnIndex));
                 }
-                if(rowIndex + 1 < n){
-                    set.add(grid.get(rowIndex+1).get(columnIndex));
+                if (rowIndex + 1 < n) {
+                    set.add(grid.get(rowIndex + 1).get(columnIndex));
                 }
-                if(columnIndex + 1 < n){
+                if (columnIndex + 1 < n) {
                     set.add(grid.get(rowIndex).get(columnIndex + 1));
                 }
-                if(columnIndex - 1 >= 0){
+                if (columnIndex - 1 >= 0) {
                     set.add(grid.get(rowIndex).get(columnIndex - 1));
                 }
                 tile.setNeighbors(set);
@@ -49,40 +50,40 @@ public class Map {
         int nbTrapsToPlace = n - 2;
         int counterCliff = 0;
         //Placing cliffs
-        while(counterCliff < nbTrapsToPlace){
+        while (counterCliff < nbTrapsToPlace) {
             int x = rn.nextInt(n);
             int y = rn.nextInt(n);
             Tile tile = grid.get(x).get(y);
-            if(!tile.isPortal() && !tile.isCliff() && !tile.isMonster()){
+            if (!tile.isPortal() && !tile.isCliff() && !tile.isMonster()) {
                 counterCliff++;
                 tile.insertCliff();
             }
         }
         //Placing monsters
         int counterMonsters = 0;
-        while(counterMonsters < nbTrapsToPlace){
+        while (counterMonsters < nbTrapsToPlace) {
             int x = rn.nextInt(n);
             int y = rn.nextInt(n);
             Tile tile = grid.get(x).get(y);
-            if(!tile.isPortal() && !tile.isCliff() && !tile.isMonster()){
+            if (!tile.isPortal() && !tile.isCliff() && !tile.isMonster()) {
                 counterMonsters++;
                 tile.insertMonster();
             }
         }
         //Determining spawnPosition
         boolean validPositionFound = false;
-        while(!validPositionFound){
+        while (!validPositionFound) {
             int x = rn.nextInt(n);
             int y = rn.nextInt(n);
             Tile tile = grid.get(x).get(y);
-            if(!tile.isPortal() && !tile.isCliff() && !tile.isMonster()){
+            if (!tile.isPortal() && !tile.isCliff() && !tile.isMonster()) {
                 validPositionFound = true;
                 spawnPosition = tile.getPosition();
             }
         }
     }
 
-    public Tile getTile(int i,int j){
+    public Tile getTile(int i, int j) {
         return grid.get(i).get(j);
     }
 

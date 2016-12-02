@@ -1,7 +1,7 @@
 package ca.uqac.ia_devoir3.agent.sensors;
 
 import ca.uqac.ia_devoir3.agent.ForestAgent;
-import ca.uqac.ia_devoir3.modele.environment.Environment;
+import ca.uqac.ia_devoir3.model.environment.Environment;
 
 /**
  * Created by dhawo on 29/11/2016.

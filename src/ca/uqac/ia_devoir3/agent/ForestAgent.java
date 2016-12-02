@@ -1,7 +1,6 @@
 package ca.uqac.ia_devoir3.agent;
 
-import ca.uqac.ia_devoir3.agent.actions.Action;
-import ca.uqac.ia_devoir3.modele.environment.Position;
+import ca.uqac.ia_devoir3.model.environment.Position;
 
 /**
  * Created by dhawo on 29/11/2016.

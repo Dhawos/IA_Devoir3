@@ -1,4 +1,4 @@
-package ca.uqac.ia_devoir3.modele.environment;
+package ca.uqac.ia_devoir3.model.environment;
 
 import java.awt.*;
 

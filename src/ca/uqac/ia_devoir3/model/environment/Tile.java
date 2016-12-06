@@ -50,6 +50,8 @@ public class Tile extends Observable{
 
     public void insertPortal(){
         portal = true;
+        setChanged();
+        notifyObservers();
     }
 
     public void insertMonster(){

@@ -28,6 +28,7 @@ public class Environment extends Observable {
         this.map = map;
         setChanged();
         notifyObservers("Map");
+        this.map.placeElements();
     }
 
     public void moveAgent(Direction direction){
@@ -162,7 +163,7 @@ public class Environment extends Observable {
     public void spawnNewAgent(){
         currentAgent = new ForestAgent(map.getSpawnPosition());
         setChanged();
-        notifyObservers("Agent");
+        notifyObservers("Spawn");
     }
 
 }

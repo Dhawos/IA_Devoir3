@@ -161,7 +161,7 @@ public class Environment extends Observable {
     }
 
     public void spawnNewAgent(){
-        currentAgent = new ForestAgent(map.getSpawnPosition());
+        currentAgent = new ForestAgent(map.getSpawnPosition(),currentMapSize,this);
         setChanged();
         notifyObservers("Spawn");
     }

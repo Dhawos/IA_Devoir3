@@ -1,7 +1,11 @@
 package ca.uqac.ia_devoir3.agent;
 
-import ca.uqac.ia_devoir3.model.environment.Direction;
-import ca.uqac.ia_devoir3.model.environment.Position;
+import ca.uqac.ia_devoir3.agent.actions.Action;
+import ca.uqac.ia_devoir3.agent.actions.Escape;
+import ca.uqac.ia_devoir3.agent.sensors.LightSensor;
+import ca.uqac.ia_devoir3.agent.sensors.SmellSensor;
+import ca.uqac.ia_devoir3.agent.sensors.WindSensor;
+import ca.uqac.ia_devoir3.model.environment.*;
 
 /**
  * Created by dhawo on 29/11/2016.
@@ -9,14 +13,43 @@ import ca.uqac.ia_devoir3.model.environment.Position;
 public class ForestAgent{
     private boolean alive;
     private Position pos;
+    private Map map;
+    private SmellSensor smellSensor;
+    private WindSensor windSensor;
+    private LightSensor lightSensor;
 
-    public ForestAgent(Position pos){
+
+
+    public ForestAgent(Position pos, int currentMapSize, Environment env){
         this.pos = pos;
         this.alive = true;
+        this.smellSensor = new SmellSensor(env,this);
+        this.windSensor = new WindSensor(env,this);
+        this.lightSensor = new LightSensor(env,this);
     }
-    /*private Action chooseAnAction(){
-        return new Action();
-    }*/
+
+    private void updateState(){
+        Tile tile = map.getTile(pos.getX(),pos.getY());
+        if(smellSensor.useSensor()){
+            tile.insertSmell(true);
+        }
+        if(lightSensor.useSensor()){
+            tile.insertPortal();
+        }
+        if(windSensor.useSensor()){
+            tile.insertWind(true);
+        }
+    }
+
+    private Action chooseAnAction(){
+        updateState();
+        //Write all knowledge to a file
+        //Load Rules and Knowledge base
+        //Get action and do it
+
+        //Placeholder
+        return new Escape();
+    }
 
     public boolean isAlive(){
         return alive;

@@ -1,6 +1,7 @@
 package ca.uqac.ia_devoir3.model.environment;
 
 import ca.uqac.ia_devoir3.agent.ForestAgent;
+import ca.uqac.ia_devoir3.exceptions.IllegalMoveException;
 
 import java.util.Observable;
 
@@ -14,9 +15,8 @@ public class Environment extends Observable {
     private ForestAgent currentAgent;
     private final static int SCORE_FIND_PORTAL_MULTIPLICATOR = 10;
     private final static int SCORE_DEATH_MULTIPLICATOR = -10;
-    private final static int SCORE_MOVEMENT_MODIFIER = 1;
+    private final static int SCORE_MOVEMENT_MODIFIER = -1;
     private final static int SCORE_USING_ROCK_MODIFIER = -10;
-
 
     public Environment() {
         score = 0;
@@ -30,6 +30,115 @@ public class Environment extends Observable {
         notifyObservers("Map");
     }
 
+    public void moveAgent(Direction direction){
+        if(direction == Direction.UP){
+            if(currentAgent.getPos().getX() > 0){
+                Tile nextTile = getTile(currentAgent.getPos().getX()-1, currentAgent.getPos().getY());
+                if(nextTile.isMonster() || nextTile.isCliff()){
+                    resetMap();
+                }else{
+                    updateScore(SCORE_MOVEMENT_MODIFIER);
+                    currentAgent.move(direction);
+                }
+            }else{
+                throw new IllegalMoveException(direction);
+            }
+        }
+        else if(direction == Direction.DOWN){
+            if(currentAgent.getPos().getX() < currentMapSize - 1){
+                Tile nextTile = getTile(currentAgent.getPos().getX()+1, currentAgent.getPos().getY());
+                if(nextTile.isMonster() || nextTile.isCliff()){
+                    resetMap();
+                }else{
+                    updateScore(SCORE_MOVEMENT_MODIFIER);
+                    currentAgent.move(direction);
+                }
+            }else{
+                throw new IllegalMoveException(direction);
+            }
+        }
+        else if(direction == Direction.LEFT){
+            if(currentAgent.getPos().getY() > 0){
+                Tile nextTile = getTile(currentAgent.getPos().getX(), currentAgent.getPos().getY()-1);
+                if(nextTile.isMonster() || nextTile.isCliff()){
+                    resetMap();
+                }else{
+                    updateScore(SCORE_MOVEMENT_MODIFIER);
+                    currentAgent.move(direction);
+                }
+            }else{
+                throw new IllegalMoveException(direction);
+            }
+        }
+        else if(direction == Direction.RIGHT){
+            if(currentAgent.getPos().getY() < currentMapSize - 1){
+                Tile nextTile = getTile(currentAgent.getPos().getX(), currentAgent.getPos().getY()+1);
+                if(nextTile.isMonster() || nextTile.isCliff()){
+                    resetMap();
+                }else{
+                    updateScore(SCORE_MOVEMENT_MODIFIER);
+                    currentAgent.move(direction);
+                }
+            }else{
+                throw new IllegalMoveException(direction);
+            }
+        }
+    }
+
+    public void throwRock(Direction direction){
+        if(direction == Direction.UP){
+            if(currentAgent.getPos().getX() > 0){
+                Tile nextTile = getTile(currentAgent.getPos().getX()-1, currentAgent.getPos().getY());
+                updateScore(SCORE_USING_ROCK_MODIFIER);
+                nextTile.removeMonster();
+            }else{
+                throw new IllegalMoveException(direction);
+            }
+        }
+        else if(direction == Direction.DOWN){
+            if(currentAgent.getPos().getX() < currentMapSize - 1){
+                Tile nextTile = getTile(currentAgent.getPos().getX()+1, currentAgent.getPos().getY());
+                updateScore(SCORE_USING_ROCK_MODIFIER);
+                nextTile.removeMonster();
+            }else{
+                throw new IllegalMoveException(direction);
+            }
+        }
+        else if(direction == Direction.LEFT){
+            if(currentAgent.getPos().getY() > 0){
+                Tile nextTile = getTile(currentAgent.getPos().getX(), currentAgent.getPos().getY()-1);
+                updateScore(SCORE_USING_ROCK_MODIFIER);
+                nextTile.removeMonster();
+            }else{
+                throw new IllegalMoveException(direction);
+            }
+        }
+        else if(direction == Direction.RIGHT){
+            if(currentAgent.getPos().getY() < currentMapSize - 1){
+                Tile nextTile = getTile(currentAgent.getPos().getX(), currentAgent.getPos().getY()+1);
+                updateScore(SCORE_USING_ROCK_MODIFIER);
+                nextTile.removeMonster();
+            }else{
+                throw new IllegalMoveException(direction);
+            }
+        }
+    }
+
+    public void resetMap(){
+        updateScore( SCORE_DEATH_MULTIPLICATOR * getCurrentMapSize());
+        spawnNewAgent();
+    }
+
+    public void exitMap(){
+        if(getTile(currentAgent.getPos()).isPortal()){
+            //Maybe send a notification
+            updateScore(SCORE_FIND_PORTAL_MULTIPLICATOR * currentMapSize);
+            this.currentMapSize++;
+            this.map = new Map(currentMapSize);
+            spawnNewAgent();
+        }
+    }
+
     public Map getMap() {
         return map;
     }
@@ -40,6 +149,14 @@ public class Environment extends Observable {
 
     public Tile getTile(Position pos){
         return map.getTile(pos.getX(),pos.getY());
+    }
+
+    public Tile getTile(int x , int y){
+        return map.getTile(x,y);
+    }
+
+    public void updateScore(int diff){
+        score += diff;
     }
 
     public void spawnNewAgent(){

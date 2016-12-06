@@ -14,5 +14,15 @@ public class InterfaceEnvironment {
         this.robot = robot;
     }
 
+    public void move(Direction dir){
+        env.moveAgent(dir);
+    }
 
+    public void throwRock(Direction dir){
+        env.throwRock(dir);
+    }
+
+    public void escape(){
+        env.exitMap();
+    }
 }

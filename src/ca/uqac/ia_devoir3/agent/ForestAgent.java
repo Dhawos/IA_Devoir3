@@ -1,5 +1,6 @@
 package ca.uqac.ia_devoir3.agent;
 
+import ca.uqac.ia_devoir3.model.environment.Direction;
 import ca.uqac.ia_devoir3.model.environment.Position;
 
 /**
@@ -23,5 +24,20 @@ public class ForestAgent{
 
     public Position getPos() {
         return pos;
+    }
+
+    public void move(Direction direction){
+        if(direction == Direction.UP){
+            this.pos.setX(this.pos.getX() - 1);
+        }
+        else if(direction == Direction.DOWN){
+            this.pos.setX(this.pos.getX() + 1);
+        }
+        else if(direction == Direction.LEFT){
+            this.pos.setX(this.pos.getY() - 1);
+        }
+        else if(direction == Direction.RIGHT){
+            this.pos.setX(this.pos.getY() + 1);
+        }
     }
 }

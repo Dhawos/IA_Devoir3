@@ -61,6 +61,15 @@ public class Tile extends Observable{
         notifyObservers();
     }
 
+    public void removeMonster(){
+        monster = false;
+        for(Tile tile : neighbors){
+            tile.insertSmell(false);
+        }
+        setChanged();
+        notifyObservers();
+    }
+
     public void insertCliff(){
         cliff = true;
         for(Tile tile : neighbors){

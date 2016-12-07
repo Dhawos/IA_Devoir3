@@ -42,9 +42,9 @@ public class JPLPrologInterface {
         }
     }
 
-    public Map request2Vars(String query){
+    public Map[] request2Vars(String query){
         Query jplQuery = new Query(query);
-        return jplQuery.oneSolution();
+        return jplQuery.allSolutions();
     }
 
     public static void main(String[] args){
@@ -66,6 +66,7 @@ public class JPLPrologInterface {
             System.out.println("passed");
         }
         */
+        /*
         JPLPrologInterface jplInterface = new JPLPrologInterface();
         jplInterface.requestNoVar("assert(visited(0,0))");
         jplInterface.requestNoVar("assert(safe(0,0))");
@@ -74,5 +75,6 @@ public class JPLPrologInterface {
         System.out.println(map.get("X"));
         System.out.println(map.get("Y"));
         map.isEmpty();
+        */
     }
 }

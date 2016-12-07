@@ -34,6 +34,10 @@ public class ForestAgent{
         this.envInterface = new InterfaceEnvironment(env,this);
     }
 
+    public void resetKnowledgeBase(){
+        this.prologInterface = new JPLPrologInterface();
+    }
+
     private void updateState(){
         Tile tile = map.getTile(pos.getX(),pos.getY());
         //Updating state and Sending info to knowledge database
@@ -71,35 +75,48 @@ public class ForestAgent{
             Action chosenAction = new Escape();
             chosenAction.doAction(envInterface);
         }else{
-            java.util.Map firstSafeTile = prologInterface.request2Vars("neighborTileRemaining(X,Y)");
-            if(!firstSafeTile.isEmpty()){
-                System.out.println(firstSafeTile.get("X"));
-                System.out.println(firstSafeTile.get("Y"));
-                Integer jplIntX = (Integer)firstSafeTile.get("X");
+            java.util.Map[] safeTiles = prologInterface.request2Vars("tileRemaining(X,Y)");
+            Tile objTile = null;
+            for(java.util.Map solution : safeTiles){
+                Integer jplIntX = (Integer)solution.get("X");
                 int X = jplIntX.intValue();
-                Integer jplIntY = (Integer)firstSafeTile.get("Y");
+                Integer jplIntY = (Integer)solution.get("Y");
                 int Y = jplIntY.intValue();
-                Tile objTile = map.getTile(X,Y);
-                Direction direction = currentTile.getDirection(objTile);
-                Action chosenAction;
-                if(direction == Direction.UP){
-                    chosenAction = new MoveUp();
-                    chosenAction.doAction(envInterface);
+                objTile = map.getTile(X,Y);
+                if(currentTile.getNeighbors().contains(objTile)){
+                    break;
                 }
-                if(direction == Direction.DOWN){
-                    chosenAction = new MoveDown();
-                    chosenAction.doAction(envInterface);
+            }
+            if(objTile == null){
+                java.util.Map[] safeButVisitedSolutions = prologInterface.request2Vars("safe(X,Y)");
+                for(java.util.Map solution : safeButVisitedSolutions){
+                    Integer jplIntX = (Integer)solution.get("X");
+                    int X = jplIntX.intValue();
+                    Integer jplIntY = (Integer)solution.get("Y");
+                    int Y = jplIntY.intValue();
+                    objTile = map.getTile(X,Y);
+                    if(currentTile.getNeighbors().contains(objTile)){
+                        break;
+                    }
                 }
-                if(direction == Direction.LEFT){
-                    chosenAction = new MoveLeft();
-                    chosenAction.doAction(envInterface);
-                }
-                if(direction == Direction.RIGHT){
-                    chosenAction = new MoveRight();
-                    chosenAction.doAction(envInterface);
-                }
-            }else{
-                System.out.println("No more safe spaces");
+            }
+            Direction direction = currentTile.getDirection(objTile);
+            Action chosenAction;
+            if(direction == Direction.UP){
+                chosenAction = new MoveUp();
+                chosenAction.doAction(envInterface);
+            }
+            if(direction == Direction.DOWN){
+                chosenAction = new MoveDown();
+                chosenAction.doAction(envInterface);
+            }
+            if(direction == Direction.LEFT){
+                chosenAction = new MoveLeft();
+                chosenAction.doAction(envInterface);
+            }
+            if(direction == Direction.RIGHT){
+                chosenAction = new MoveRight();
+                chosenAction.doAction(envInterface);
             }
         }
     }

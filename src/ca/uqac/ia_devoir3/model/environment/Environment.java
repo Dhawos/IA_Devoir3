@@ -1,6 +1,7 @@
 package ca.uqac.ia_devoir3.model.environment;
 
 import ca.uqac.ia_devoir3.agent.ForestAgent;
+import ca.uqac.ia_devoir3.agent.actions.Action;
 import ca.uqac.ia_devoir3.exceptions.IllegalMoveException;
 
 import java.util.Observable;
@@ -84,6 +85,9 @@ public class Environment extends Observable {
                 throw new IllegalMoveException(direction);
             }
         }
+
+        setChanged();
+        notifyObservers("MoveAgent");
     }
 
     public void throwRock(Direction direction){
@@ -135,11 +139,10 @@ public class Environment extends Observable {
             //Maybe send a notification
             updateScore(SCORE_FIND_PORTAL_MULTIPLICATOR * currentMapSize);
             this.currentMapSize++;
-            this.map = new Map(currentMapSize);
+            setMap(new Map(currentMapSize));
             spawnNewAgent();
         }
     }
-
     public Map getMap() {
         return map;
     }
@@ -158,6 +161,8 @@ public class Environment extends Observable {
 
     public void updateScore(int diff){
         score += diff;
+        setChanged();
+        notifyObservers(new Integer(score));
     }
 
     public void spawnNewAgent(){
@@ -166,4 +171,11 @@ public class Environment extends Observable {
         notifyObservers("Spawn");
     }
 
+    public void requestAgentAction(){
+        currentAgent.chooseAndDoAction();
+    }
+
+    public ForestAgent getCurrentAgent() {
+        return currentAgent;
+    }
 }

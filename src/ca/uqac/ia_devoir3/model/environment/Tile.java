@@ -48,6 +48,10 @@ public class Tile extends Observable{
         return portal;
     }
 
+    public HashSet<Tile> getNeighbors() {
+        return neighbors;
+    }
+
     public void insertPortal(){
         portal = true;
         setChanged();
@@ -105,4 +109,19 @@ public class Tile extends Observable{
         this.neighbors = neighbors;
     }
 
+    public Direction getDirection(Tile other){
+        if(neighbors.contains(other)){
+            if(other.getPosition().getY() < pos.getY()){
+                return Direction.LEFT;
+            }else if(other.getPosition().getY() > pos.getY()){
+                return Direction.RIGHT;
+            }else if(other.getPosition().getX() < pos.getX()){
+                return Direction.UP;
+            }else if(other.getPosition().getX() > pos.getX()){
+                return Direction.DOWN;
+            }
+            throw new RuntimeException("Attempted to get Direction fro ma non neighbor tile");
+        }
+        return Direction.RIGHT;
+    }
 }

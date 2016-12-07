@@ -29,6 +29,10 @@ public class TilePanel extends JPanel implements Observer {
         label.setText(label.getText().replace("A", ""));
     }
 
+    public boolean hasAgent(){
+        return label.getText().contains("A");
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         if(o instanceof Tile){

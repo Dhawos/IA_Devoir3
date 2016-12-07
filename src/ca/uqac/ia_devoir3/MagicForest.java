@@ -14,7 +14,7 @@ public class MagicForest {
         MainFrame mf = new MainFrame();
 
         //init Controller
-        MoveController moveController = new MoveController();
+        MoveController moveController = new MoveController(environment);
         mf.getControlPanel().getMoveButton().addMouseListener(moveController);
 
         //init views

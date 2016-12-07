@@ -1,15 +1,16 @@
 package ca.uqac.ia_devoir3.model.environment;
 
-import java.awt.*;
+
+import ca.uqac.ia_devoir3.agent.ForestAgent;
 
 /**
  * Created by dhawo on 29/11/2016.
  */
 public class InterfaceEnvironment {
     private Environment env;
-    private Robot robot;
+    private ForestAgent robot;
 
-    public InterfaceEnvironment(Environment env, Robot robot) {
+    public InterfaceEnvironment(Environment env, ForestAgent robot) {
         this.env = env;
         this.robot = robot;
     }

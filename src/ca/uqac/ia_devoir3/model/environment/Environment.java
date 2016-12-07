@@ -1,6 +1,7 @@
 package ca.uqac.ia_devoir3.model.environment;
 
 import ca.uqac.ia_devoir3.agent.ForestAgent;
+import ca.uqac.ia_devoir3.agent.actions.Action;
 import ca.uqac.ia_devoir3.exceptions.IllegalMoveException;
 
 import java.util.Observable;
@@ -166,4 +167,7 @@ public class Environment extends Observable {
         notifyObservers("Spawn");
     }
 
+    public void requestAgentAction(){
+        currentAgent.chooseAndDoAction();
+    }
 }

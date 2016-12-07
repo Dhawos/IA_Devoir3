@@ -85,6 +85,9 @@ public class Environment extends Observable {
                 throw new IllegalMoveException(direction);
             }
         }
+
+        setChanged();
+        notifyObservers("MoveAgent");
     }
 
     public void throwRock(Direction direction){
@@ -169,5 +172,9 @@ public class Environment extends Observable {
 
     public void requestAgentAction(){
         currentAgent.chooseAndDoAction();
+    }
+
+    public ForestAgent getCurrentAgent() {
+        return currentAgent;
     }
 }

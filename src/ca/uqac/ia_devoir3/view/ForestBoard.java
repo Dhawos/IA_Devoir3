@@ -50,6 +50,17 @@ public class ForestBoard extends JPanel implements Observer{
                 } else if((String)arg == "Spawn"){
                     Position spawnPosition = env.getMap().getSpawnPosition();
                     tiles[spawnPosition.getX()][spawnPosition.getY()].insertAgent();
+                } else if((String)arg == "MoveAgent"){
+                    for(TilePanel[] rowTile : tiles){
+                        for(TilePanel tile : rowTile){
+                            if(tile.hasAgent()){
+                                tile.removeAgent();
+                            }
+                        }
+                    }
+                    Position agentPos = env.getCurrentAgent().getPos();
+                    tiles[agentPos.getX()][agentPos.getY()].insertAgent();
+
                 }
 
 

@@ -66,7 +66,15 @@ public class Tile extends Observable{
     public void removeMonster(){
         monster = false;
         for(Tile tile : neighbors){
-            tile.insertSmell(false);
+            boolean foundOtherMonster = false;
+            for (Tile otherTile : tile.neighbors){
+                if(otherTile.isMonster() && otherTile.getPosition() != pos) {
+                    foundOtherMonster = true;
+                }
+            }
+            if (!foundOtherMonster){
+                tile.insertSmell(false);
+            }
         }
         setChanged();
         notifyObservers();

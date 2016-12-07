@@ -132,8 +132,8 @@ public class Environment extends Observable {
 
     public void resetMap(){
         updateScore( SCORE_DEATH_MULTIPLICATOR * getCurrentMapSize());
-        JOptionPane.showMessageDialog(null, "Your Agent is dead!");
         spawnNewAgent();
+        JOptionPane.showMessageDialog(null, "Your Agent is dead!");
     }
 
     public void exitMap(){

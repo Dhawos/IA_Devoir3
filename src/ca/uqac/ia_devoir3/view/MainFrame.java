@@ -12,7 +12,7 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         super(TITLE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(1024, 768);
         setLayout(new BorderLayout(0, 0));
 
         forestBoard = new ForestBoard(3);

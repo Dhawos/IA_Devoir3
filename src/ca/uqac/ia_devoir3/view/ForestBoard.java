@@ -39,7 +39,7 @@ public class ForestBoard extends JPanel implements Observer{
     public void update(Observable o, Object arg) {
             if(o instanceof Environment){
                 Environment env = (Environment) o;
-                if((String)arg == "Map"){
+                if(arg == "Map"){
                     add(createBoard(env.getCurrentMapSize()), BorderLayout.CENTER);
                     for(int row = 0; row < env.getCurrentMapSize(); row++){
                         for(int col = 0; col < env.getCurrentMapSize(); col++){
@@ -47,10 +47,10 @@ public class ForestBoard extends JPanel implements Observer{
                         }
                     }
 
-                } else if((String)arg == "Spawn"){
+                } else if(arg == "Spawn"){
                     Position spawnPosition = env.getMap().getSpawnPosition();
                     tiles[spawnPosition.getX()][spawnPosition.getY()].insertAgent();
-                } else if((String)arg == "MoveAgent"){
+                } else if(arg == "MoveAgent"){
                     for(TilePanel[] rowTile : tiles){
                         for(TilePanel tile : rowTile){
                             if(tile.hasAgent()){

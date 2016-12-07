@@ -139,11 +139,10 @@ public class Environment extends Observable {
             //Maybe send a notification
             updateScore(SCORE_FIND_PORTAL_MULTIPLICATOR * currentMapSize);
             this.currentMapSize++;
-            this.map = new Map(currentMapSize);
+            setMap(new Map(currentMapSize));
             spawnNewAgent();
         }
     }
-
     public Map getMap() {
         return map;
     }
@@ -162,6 +161,8 @@ public class Environment extends Observable {
 
     public void updateScore(int diff){
         score += diff;
+        setChanged();
+        notifyObservers(new Integer(score));
     }
 
     public void spawnNewAgent(){

@@ -19,6 +19,7 @@ public class MagicForest {
 
         //init views
         environment.addObserver(mf.getForestBoard());
+        environment.addObserver(mf.getControlPanel());
 
         environment.setMap(new Map(3));
         environment.spawnNewAgent();

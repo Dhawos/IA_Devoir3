@@ -82,8 +82,9 @@ public class ForestAgent{
                 int X = jplIntX.intValue();
                 Integer jplIntY = (Integer)solution.get("Y");
                 int Y = jplIntY.intValue();
-                objTile = map.getTile(X,Y);
-                if(currentTile.getNeighbors().contains(objTile)){
+                Tile testedTile = map.getTile(X,Y);
+                if(currentTile.getNeighbors().contains(testedTile)){
+                    objTile = testedTile;
                     break;
                 }
             }
@@ -94,30 +95,36 @@ public class ForestAgent{
                     int X = jplIntX.intValue();
                     Integer jplIntY = (Integer)solution.get("Y");
                     int Y = jplIntY.intValue();
-                    objTile = map.getTile(X,Y);
-                    if(currentTile.getNeighbors().contains(objTile)){
+                    Tile testedTile = map.getTile(X,Y);
+                    if(currentTile.getNeighbors().contains(testedTile) && currentTile != testedTile){
+                        objTile = testedTile;
                         break;
                     }
                 }
             }
-            Direction direction = currentTile.getDirection(objTile);
-            Action chosenAction;
-            if(direction == Direction.UP){
-                chosenAction = new MoveUp();
-                chosenAction.doAction(envInterface);
+            if(objTile != null){
+                Direction direction = currentTile.getDirection(objTile);
+                Action chosenAction;
+                if(direction == Direction.UP){
+                    chosenAction = new MoveUp();
+                    chosenAction.doAction(envInterface);
+                }
+                if(direction == Direction.DOWN){
+                    chosenAction = new MoveDown();
+                    chosenAction.doAction(envInterface);
+                }
+                if(direction == Direction.LEFT){
+                    chosenAction = new MoveLeft();
+                    chosenAction.doAction(envInterface);
+                }
+                if(direction == Direction.RIGHT){
+                    chosenAction = new MoveRight();
+                    chosenAction.doAction(envInterface);
+                }
+            }else{
+                System.out.println("No suitable action was found");
             }
-            if(direction == Direction.DOWN){
-                chosenAction = new MoveDown();
-                chosenAction.doAction(envInterface);
-            }
-            if(direction == Direction.LEFT){
-                chosenAction = new MoveLeft();
-                chosenAction.doAction(envInterface);
-            }
-            if(direction == Direction.RIGHT){
-                chosenAction = new MoveRight();
-                chosenAction.doAction(envInterface);
-            }
+
         }
     }
 

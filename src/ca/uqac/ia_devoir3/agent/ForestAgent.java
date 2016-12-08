@@ -29,7 +29,7 @@ public class ForestAgent{
 
 
     public ForestAgent(Position pos, int currentMapSize, Environment env){
-        this.pos = pos;
+        this.pos = new Position(pos.getX(),pos.getY());
         this.alive = true;
         this.smellSensor = new SmellSensor(env,this);
         this.windSensor = new WindSensor(env,this);

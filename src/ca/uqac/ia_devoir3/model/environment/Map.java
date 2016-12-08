@@ -54,7 +54,7 @@ public class Map {
         int portalY = rn.nextInt(size);
         grid.get(portalX).get(portalY).insertPortal();
         //Determining number of traps to place
-        int nbTrapsToPlace = size - 2;
+        int nbTrapsToPlace = (size/2);
         int counterCliff = 0;
         //Placing cliffs
         while (counterCliff < nbTrapsToPlace) {

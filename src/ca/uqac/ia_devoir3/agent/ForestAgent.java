@@ -34,14 +34,15 @@ public class ForestAgent{
     }
 
     public void resetKnowledgeBase(){
-        prologInterface.requestNoVar("retractAll(safe(X,Y))");
-        prologInterface.requestNoVar("retractAll(visited(X,Y))");
-        prologInterface.requestNoVar("retractAll(tileRemaining(X,Y))");
-        prologInterface.requestNoVar("retractAll(neighborSmell(X,Y))");
-        prologInterface.requestNoVar("retractAll(neighborWind(X,Y))");
-        prologInterface.requestNoVar("retractAll(riskyTile(X,Y))");
-        prologInterface.requestNoVar("retractAll(shouldThrowRock(X,Y))");
-        //prologInterface.requestNoVar("retractAll(neighbor(X,)");
+        prologInterface.requestNoVar("retractall(safe(X,Y))");
+        prologInterface.requestNoVar("retractall(visited(X,Y))");
+        prologInterface.requestNoVar("retractall(neighborSmell(X,Y))");
+        prologInterface.requestNoVar("retractall(neighborWind(X,Y))");
+        prologInterface.requestNoVar("retractall(tileRemaining(X,Y))");
+        prologInterface.requestNoVar("retractall(potentialMonster(X,Y))");
+        prologInterface.requestNoVar("retractall(potentialCliff(X,Y))");
+        prologInterface.requestNoVar("retractall(riskyTile(X,Y))");
+        prologInterface.requestNoVar("retractall(shouldThrowRock(X,Y))");
     }
 
     private void updateState(){

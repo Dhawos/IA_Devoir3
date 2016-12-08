@@ -162,39 +162,43 @@ public class ForestAgent{
                     objTile = solutions.get(selectedSolution);
                 }
             }
-            Direction direction = currentTile.getDirection(objTile);
-            Action chosenAction;
-            if(direction == Direction.UP){
-                if(shouldThrowRock){
-                    chosenAction = new ThrowRockUp();
+            if(objTile != null){
+                Direction direction = currentTile.getDirection(objTile);
+                Action chosenAction;
+                if(direction == Direction.UP){
+                    if(shouldThrowRock){
+                        chosenAction = new ThrowRockUp();
+                        chosenAction.doAction(envInterface);
+                    }
+                    chosenAction = new MoveUp();
                     chosenAction.doAction(envInterface);
                 }
-                chosenAction = new MoveUp();
-                chosenAction.doAction(envInterface);
-            }
-            if(direction == Direction.DOWN){
-                if(shouldThrowRock){
-                    chosenAction = new ThrowRockDown();
+                if(direction == Direction.DOWN){
+                    if(shouldThrowRock){
+                        chosenAction = new ThrowRockDown();
+                        chosenAction.doAction(envInterface);
+                    }
+                    chosenAction = new MoveDown();
                     chosenAction.doAction(envInterface);
                 }
-                chosenAction = new MoveDown();
-                chosenAction.doAction(envInterface);
-            }
-            if(direction == Direction.LEFT){
-                if(shouldThrowRock){
-                    chosenAction = new ThrowRockLeft();
+                if(direction == Direction.LEFT){
+                    if(shouldThrowRock){
+                        chosenAction = new ThrowRockLeft();
+                        chosenAction.doAction(envInterface);
+                    }
+                    chosenAction = new MoveLeft();
                     chosenAction.doAction(envInterface);
                 }
-                chosenAction = new MoveLeft();
-                chosenAction.doAction(envInterface);
-            }
-            if(direction == Direction.RIGHT){
-                if(shouldThrowRock){
-                    chosenAction = new ThrowRockRight();
+                if(direction == Direction.RIGHT){
+                    if(shouldThrowRock){
+                        chosenAction = new ThrowRockRight();
+                        chosenAction.doAction(envInterface);
+                    }
+                    chosenAction = new MoveRight();
                     chosenAction.doAction(envInterface);
                 }
-                chosenAction = new MoveRight();
-                chosenAction.doAction(envInterface);
+            }else{
+                System.out.println("No suitable action found");
             }
         }
     }

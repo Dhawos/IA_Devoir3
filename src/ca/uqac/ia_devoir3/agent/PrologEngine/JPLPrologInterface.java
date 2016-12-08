@@ -26,11 +26,7 @@ public class JPLPrologInterface {
 
     public boolean requestNoVar(String query){
         Query jplQuery = new Query(query);
-        if(jplQuery.hasSolution()) {
-            return false;
-        }else{
-            return true;
-        }
+        return jplQuery.hasSolution();
     }
 
     public boolean assertion(String query){

@@ -142,6 +142,7 @@ public class Environment extends Observable {
             this.currentMapSize++;
             setMap(new Map(currentMapSize));
             spawnNewAgent();
+            currentAgent.resetKnowledgeBase();
         }
     }
     public Map getMap() {

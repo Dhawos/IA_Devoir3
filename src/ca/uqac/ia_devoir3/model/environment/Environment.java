@@ -37,11 +37,11 @@ public class Environment extends Observable {
         if(direction == Direction.UP){
             if(currentAgent.getPos().getX() > 0){
                 Tile nextTile = getTile(currentAgent.getPos().getX()-1, currentAgent.getPos().getY());
+                currentAgent.move(direction);
                 if(nextTile.isMonster() || nextTile.isCliff()){
                     resetMap();
                 }else{
                     updateScore(SCORE_MOVEMENT_MODIFIER);
-                    currentAgent.move(direction);
                 }
             }else{
                 throw new IllegalMoveException(direction);
@@ -50,11 +50,11 @@ public class Environment extends Observable {
         else if(direction == Direction.DOWN){
             if(currentAgent.getPos().getX() < currentMapSize - 1){
                 Tile nextTile = getTile(currentAgent.getPos().getX()+1, currentAgent.getPos().getY());
+                currentAgent.move(direction);
                 if(nextTile.isMonster() || nextTile.isCliff()){
                     resetMap();
                 }else{
                     updateScore(SCORE_MOVEMENT_MODIFIER);
-                    currentAgent.move(direction);
                 }
             }else{
                 throw new IllegalMoveException(direction);
@@ -63,11 +63,11 @@ public class Environment extends Observable {
         else if(direction == Direction.LEFT){
             if(currentAgent.getPos().getY() > 0){
                 Tile nextTile = getTile(currentAgent.getPos().getX(), currentAgent.getPos().getY()-1);
+                currentAgent.move(direction);
                 if(nextTile.isMonster() || nextTile.isCliff()){
                     resetMap();
                 }else{
                     updateScore(SCORE_MOVEMENT_MODIFIER);
-                    currentAgent.move(direction);
                 }
             }else{
                 throw new IllegalMoveException(direction);
@@ -76,11 +76,11 @@ public class Environment extends Observable {
         else if(direction == Direction.RIGHT){
             if(currentAgent.getPos().getY() < currentMapSize - 1){
                 Tile nextTile = getTile(currentAgent.getPos().getX(), currentAgent.getPos().getY()+1);
+                currentAgent.move(direction);
                 if(nextTile.isMonster() || nextTile.isCliff()){
                     resetMap();
                 }else{
                     updateScore(SCORE_MOVEMENT_MODIFIER);
-                    currentAgent.move(direction);
                 }
             }else{
                 throw new IllegalMoveException(direction);
@@ -132,8 +132,8 @@ public class Environment extends Observable {
 
     public void resetMap(){
         updateScore( SCORE_DEATH_MULTIPLICATOR * getCurrentMapSize());
-        spawnNewAgent();
         JOptionPane.showMessageDialog(null, "Your Agent is dead!");
+        spawnNewAgent();
     }
 
     public void exitMap(){

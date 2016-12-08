@@ -4,6 +4,9 @@
         neighborWind/2,
         neighborSmell/2.
 
+count(P,Count) :-
+        findall(1,P,L),
+        length(L,Count).
 
 tileRemaining(X,Y) :-
 	safe(X,Y),

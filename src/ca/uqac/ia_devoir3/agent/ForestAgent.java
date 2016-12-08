@@ -8,6 +8,11 @@ import ca.uqac.ia_devoir3.agent.sensors.WindSensor;
 import ca.uqac.ia_devoir3.model.environment.*;
 import org.jpl7.Integer;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
 /**
  * Created by dhawo on 29/11/2016.
  */
@@ -44,28 +49,44 @@ public class ForestAgent{
     private void updateState(){
         Tile tile = map.getTile(pos.getX(),pos.getY());
         //Updating state and Sending info to knowledge database
-        prologInterface.assertion("safe("+pos.getX()+","+pos.getY()+")");
-        prologInterface.assertion("visited("+pos.getX()+","+pos.getY()+")");
+        if(!prologInterface.requestNoVar("safe("+tile.getPosition().getX()+","+tile.getPosition().getY()+").")){
+            prologInterface.assertion("safe("+pos.getX()+","+pos.getY()+")");
+        }
+        if(!prologInterface.requestNoVar("visited("+tile.getPosition().getX()+","+tile.getPosition().getY()+").")){
+            prologInterface.assertion("visited("+pos.getX()+","+pos.getY()+")");
+        }
         if(smellSensor.useSensor()){
             tile.insertSmell(true);
             for(Tile neighborTile : tile.getNeighbors()){
-                prologInterface.assertion("neighborSmell("+neighborTile.getPosition().getX()+","+neighborTile.getPosition().getY()+")");
+                if(!prologInterface.requestNoVar("neighborSmell("+neighborTile.getPosition().getX()+","+neighborTile.getPosition().getY()+").")){
+                    prologInterface.assertion("neighborSmell("+neighborTile.getPosition().getX()+","+neighborTile.getPosition().getY()+")");
+                }
+            }
+        }else{
+            for(Tile neighbor : tile.getNeighbors()){
+                prologInterface.requestNoVar("retract(neighborSmell("+neighbor.getPosition().getX()+","+neighbor.getPosition().getY()+")).");
             }
         }
         if(lightSensor.useSensor()){
-            prologInterface.assertion("safe("+pos.getX()+","+pos.getY()+")");
-            prologInterface.assertion("portal("+pos.getX()+","+pos.getY()+")");
             tile.insertPortal();
         }
         if(windSensor.useSensor()){
             tile.insertWind(true);
             for(Tile neighborTile : tile.getNeighbors()){
-                prologInterface.assertion("neighborWind("+neighborTile.getPosition().getX()+","+neighborTile.getPosition().getY()+")");
+                if(!prologInterface.requestNoVar("neighborWind("+neighborTile.getPosition().getX()+","+neighborTile.getPosition().getY()+").")){
+                    prologInterface.assertion("neighborWind("+neighborTile.getPosition().getX()+","+neighborTile.getPosition().getY()+")");
+                }
+            }
+        }else{
+            for(Tile neighbor : tile.getNeighbors()){
+                prologInterface.requestNoVar("retract(neighborWind("+neighbor.getPosition().getX()+","+neighbor.getPosition().getY()+")).");
             }
         }
-        if(!tile.isSmell() && !tile.isWind()){
+        if(!smellSensor.useSensor() && !windSensor.useSensor()){
             for(Tile neighborTile : tile.getNeighbors()){
-                prologInterface.assertion("safe("+neighborTile.getPosition().getX()+","+neighborTile.getPosition().getY()+")");
+                if(!prologInterface.requestNoVar("safe("+neighborTile.getPosition().getX()+","+neighborTile.getPosition().getY()+").")){
+                    prologInterface.assertion("safe("+neighborTile.getPosition().getX()+","+neighborTile.getPosition().getY()+")");
+                }
             }
         }
     }
@@ -79,6 +100,7 @@ public class ForestAgent{
             chosenAction.doAction(envInterface);
         }else{
             java.util.Map[] safeTiles = prologInterface.request2Vars("tileRemaining(X,Y)");
+            LinkedList<Tile> solutions = new LinkedList<>();
             Tile objTile = null;
             for(java.util.Map solution : safeTiles){
                 Integer jplIntX = (Integer)solution.get("X");
@@ -86,26 +108,40 @@ public class ForestAgent{
                 Integer jplIntY = (Integer)solution.get("Y");
                 int Y = jplIntY.intValue();
                 Tile testedTile = map.getTile(X,Y);
-                if(currentTile.getNeighbors().contains(testedTile)){
-                    objTile = testedTile;
-                    break;
+                if(currentTile.getNeighbors().contains(testedTile) && currentTile != testedTile){
+                    solutions.add(testedTile);
                 }
             }
+            if(!solutions.isEmpty()){
+                Random rn = new Random();
+                int selectedSolution = rn.nextInt(solutions.size());
+                objTile = solutions.get(selectedSolution);
+            }
+            solutions = new LinkedList<>();
             if(objTile == null){
+                java.util.Map[] visited = prologInterface.request2Vars("visited(X,Y)");
                 java.util.Map[] safeButVisitedSolutions = prologInterface.request2Vars("safe(X,Y)");
-                for(java.util.Map solution : safeButVisitedSolutions){
-                    Integer jplIntX = (Integer)solution.get("X");
-                    int X = jplIntX.intValue();
-                    Integer jplIntY = (Integer)solution.get("Y");
-                    int Y = jplIntY.intValue();
-                    Tile testedTile = map.getTile(X,Y);
-                    if(currentTile.getNeighbors().contains(testedTile) && currentTile != testedTile){
-                        objTile = testedTile;
-                        break;
+                if(visited.length != safeButVisitedSolutions.length){
+                    for(java.util.Map solution : safeButVisitedSolutions){
+                        Integer jplIntX = (Integer)solution.get("X");
+                        int X = jplIntX.intValue();
+                        Integer jplIntY = (Integer)solution.get("Y");
+                        int Y = jplIntY.intValue();
+                        Tile testedTile = map.getTile(X,Y);
+                        if(currentTile.getNeighbors().contains(testedTile) && currentTile != testedTile){
+                            solutions.add(testedTile);
+                        }
+                    }
+                    if(!solutions.isEmpty()){
+                        Random rn = new Random();
+                        int selectedSolution = rn.nextInt(solutions.size());
+                        objTile = solutions.get(selectedSolution);
                     }
                 }
+
             }
             boolean shouldThrowRock = false;
+            solutions = new LinkedList<>();
             if(objTile == null){
                 //No more safe tiles
                 java.util.Map[] riskySolutions = prologInterface.request2Vars("riskyTile(X,Y)");
@@ -117,9 +153,13 @@ public class ForestAgent{
                     Tile testedTile = map.getTile(X,Y);
                     if(currentTile.getNeighbors().contains(testedTile) && currentTile != testedTile){
                         shouldThrowRock = prologInterface.requestNoVar("shouldThrowRock("+X+","+Y+")");
-                        objTile = testedTile;
-                        break;
+                        solutions.add(testedTile);
                     }
+                }
+                if(!solutions.isEmpty()){
+                    Random rn = new Random();
+                    int selectedSolution = rn.nextInt(solutions.size());
+                    objTile = solutions.get(selectedSolution);
                 }
             }
             Direction direction = currentTile.getDirection(objTile);

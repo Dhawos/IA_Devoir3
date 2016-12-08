@@ -4,6 +4,7 @@ import ca.uqac.ia_devoir3.agent.ForestAgent;
 import ca.uqac.ia_devoir3.agent.actions.Action;
 import ca.uqac.ia_devoir3.exceptions.IllegalMoveException;
 
+import javax.swing.*;
 import java.util.Observable;
 
 /**
@@ -132,11 +133,11 @@ public class Environment extends Observable {
     public void resetMap(){
         updateScore( SCORE_DEATH_MULTIPLICATOR * getCurrentMapSize());
         spawnNewAgent();
+        JOptionPane.showMessageDialog(null, "Your Agent is dead!");
     }
 
     public void exitMap(){
         if(getTile(currentAgent.getPos()).isPortal()){
-            //Maybe send a notification
             updateScore(SCORE_FIND_PORTAL_MULTIPLICATOR * currentMapSize);
             this.currentMapSize++;
             setMap(new Map(currentMapSize));

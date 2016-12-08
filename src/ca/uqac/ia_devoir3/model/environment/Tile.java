@@ -120,8 +120,8 @@ public class Tile extends Observable{
             }else if(other.getPosition().getX() > pos.getX()){
                 return Direction.DOWN;
             }
-            throw new RuntimeException("Attempted to get Direction fro ma non neighbor tile");
+            throw new RuntimeException("Attempted to get Direction from a non neighbor tile");
         }
-        return Direction.RIGHT;
+        throw new RuntimeException("OtherTile not in neighborhood");
     }
 }

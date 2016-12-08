@@ -2,12 +2,7 @@
         safe/2,
         visited/2,
         neighborWind/2,
-        neighborSmell/2,
-        tileRemaining/2,
-        riskyTile/2,
-        potentialCliff/2,
-        potentialMonster/2,
-        shouldThrowRock/2.
+        neighborSmell/2.
 
 
 tileRemaining(X,Y) :-

@@ -31,6 +31,7 @@ public class ForestAgent{
         this.lightSensor = new LightSensor(env,this);
         this.map = new Map(currentMapSize);
         this.envInterface = new InterfaceEnvironment(env,this);
+        resetKnowledgeBase();
     }
 
     public void resetKnowledgeBase(){
@@ -38,11 +39,6 @@ public class ForestAgent{
         prologInterface.requestNoVar("retractall(visited(X,Y))");
         prologInterface.requestNoVar("retractall(neighborSmell(X,Y))");
         prologInterface.requestNoVar("retractall(neighborWind(X,Y))");
-        prologInterface.requestNoVar("retractall(tileRemaining(X,Y))");
-        prologInterface.requestNoVar("retractall(potentialMonster(X,Y))");
-        prologInterface.requestNoVar("retractall(potentialCliff(X,Y))");
-        prologInterface.requestNoVar("retractall(riskyTile(X,Y))");
-        prologInterface.requestNoVar("retractall(shouldThrowRock(X,Y))");
     }
 
     private void updateState(){

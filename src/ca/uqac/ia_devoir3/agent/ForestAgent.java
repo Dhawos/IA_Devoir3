@@ -18,7 +18,7 @@ public class ForestAgent{
     private SmellSensor smellSensor;
     private WindSensor windSensor;
     private LightSensor lightSensor;
-    private JPLPrologInterface prologInterface;
+    private static JPLPrologInterface prologInterface = new JPLPrologInterface();;
     private InterfaceEnvironment envInterface;
 
 
@@ -29,13 +29,19 @@ public class ForestAgent{
         this.smellSensor = new SmellSensor(env,this);
         this.windSensor = new WindSensor(env,this);
         this.lightSensor = new LightSensor(env,this);
-        this.prologInterface = new JPLPrologInterface();
         this.map = new Map(currentMapSize);
         this.envInterface = new InterfaceEnvironment(env,this);
     }
 
     public void resetKnowledgeBase(){
-        this.prologInterface = new JPLPrologInterface();
+        prologInterface.requestNoVar("retractAll(safe(X,Y))");
+        prologInterface.requestNoVar("retractAll(visited(X,Y))");
+        prologInterface.requestNoVar("retractAll(tileRemaining(X,Y))");
+        prologInterface.requestNoVar("retractAll(neighborSmell(X,Y))");
+        prologInterface.requestNoVar("retractAll(neighborWind(X,Y))");
+        prologInterface.requestNoVar("retractAll(riskyTile(X,Y))");
+        prologInterface.requestNoVar("retractAll(shouldThrowRock(X,Y))");
+        //prologInterface.requestNoVar("retractAll(neighbor(X,)");
     }
 
     private void updateState(){
@@ -102,29 +108,57 @@ public class ForestAgent{
                     }
                 }
             }
-            if(objTile != null){
-                Direction direction = currentTile.getDirection(objTile);
-                Action chosenAction;
-                if(direction == Direction.UP){
-                    chosenAction = new MoveUp();
-                    chosenAction.doAction(envInterface);
+            boolean shouldThrowRock = false;
+            if(objTile == null){
+                //No more safe tiles
+                java.util.Map[] riskySolutions = prologInterface.request2Vars("riskyTile(X,Y)");
+                for(java.util.Map solution : riskySolutions){
+                    Integer jplIntX = (Integer)solution.get("X");
+                    int X = jplIntX.intValue();
+                    Integer jplIntY = (Integer)solution.get("Y");
+                    int Y = jplIntY.intValue();
+                    Tile testedTile = map.getTile(X,Y);
+                    if(currentTile.getNeighbors().contains(testedTile) && currentTile != testedTile){
+                        shouldThrowRock = prologInterface.requestNoVar("shouldThrowRock("+X+","+Y+")");
+                        objTile = testedTile;
+                        break;
+                    }
                 }
-                if(direction == Direction.DOWN){
-                    chosenAction = new MoveDown();
-                    chosenAction.doAction(envInterface);
-                }
-                if(direction == Direction.LEFT){
-                    chosenAction = new MoveLeft();
-                    chosenAction.doAction(envInterface);
-                }
-                if(direction == Direction.RIGHT){
-                    chosenAction = new MoveRight();
-                    chosenAction.doAction(envInterface);
-                }
-            }else{
-                System.out.println("No suitable action was found");
             }
-
+            Direction direction = currentTile.getDirection(objTile);
+            Action chosenAction;
+            if(direction == Direction.UP){
+                if(shouldThrowRock){
+                    chosenAction = new ThrowRockUp();
+                    chosenAction.doAction(envInterface);
+                }
+                chosenAction = new MoveUp();
+                chosenAction.doAction(envInterface);
+            }
+            if(direction == Direction.DOWN){
+                if(shouldThrowRock){
+                    chosenAction = new ThrowRockDown();
+                    chosenAction.doAction(envInterface);
+                }
+                chosenAction = new MoveDown();
+                chosenAction.doAction(envInterface);
+            }
+            if(direction == Direction.LEFT){
+                if(shouldThrowRock){
+                    chosenAction = new ThrowRockLeft();
+                    chosenAction.doAction(envInterface);
+                }
+                chosenAction = new MoveLeft();
+                chosenAction.doAction(envInterface);
+            }
+            if(direction == Direction.RIGHT){
+                if(shouldThrowRock){
+                    chosenAction = new ThrowRockRight();
+                    chosenAction.doAction(envInterface);
+                }
+                chosenAction = new MoveRight();
+                chosenAction.doAction(envInterface);
+            }
         }
     }
 

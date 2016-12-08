@@ -40,6 +40,7 @@ public class ForestBoard extends JPanel implements Observer{
             if(o instanceof Environment){
                 Environment env = (Environment) o;
                 if(arg == "Map"){
+                    removeAll();
                     add(createBoard(env.getCurrentMapSize()), BorderLayout.CENTER);
                     for(int row = 0; row < env.getCurrentMapSize(); row++){
                         for(int col = 0; col < env.getCurrentMapSize(); col++){

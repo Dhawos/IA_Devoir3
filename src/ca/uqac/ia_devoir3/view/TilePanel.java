@@ -55,6 +55,7 @@ public class TilePanel extends JPanel implements Observer {
             if(((Tile) o).isWind()){
                 label.setText(label.getText() + "W");
             }
+            setBackground(Color.white);
         }
     }
 }
